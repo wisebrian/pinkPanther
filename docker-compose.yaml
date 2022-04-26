@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  revox:
+    build: ./reverseP
+    ports: 
+      - 8080:8080
+    networks:
+      revvv:
+        ipv4_address: 172.16.238.11
+        
+  origin:
+    build: ./origin
+    ports: 
+      - 8081:8081
+    networks:
+      revvv:
+        ipv4_address: 172.16.238.10        
+
+  web:
+    build: ./web
+    ports: 
+      - 8082:8082
+    networks:
+      revvv:
+        ipv4_address: 172.16.238.12
+        
+networks:
+  revvv:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"
