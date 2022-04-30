@@ -5,7 +5,7 @@ services:
     ports: 
       - 8080:8080
     volumes: 
-      - "./config.json:/config.json"
+      - "./config.yaml:/config.yaml"
         
   httpbin_1:
     image: kennethreitz/httpbin

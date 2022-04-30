@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,22 +10,24 @@ import (
 	"net/url"
 	"sync"
 	"time"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Config is a configuration.
 type Config struct {
-	Proxy    Proxy     `json:"proxy"`
-	Backends []Backend `json:"backends"`
+	Proxy    Proxy     `yaml:"proxy"`
+	Backends []Backend `yaml:"backends"`
 }
 
 // Proxy is a reverse proxy, and means load balancer.
 type Proxy struct {
-	Port string `json:"port"`
+	Port string `yaml:"port"`
 }
 
 // Backend is servers which load balancer is transferred.
 type Backend struct {
-	URL    string `json:"url"`
+	URL    string `yaml:"address"`
 	IsDead bool
 	mu     sync.RWMutex
 }
@@ -113,11 +114,11 @@ var cfg Config
 
 // Serve serves a loadbalancer.
 func Serve() {
-	data, err := ioutil.ReadFile("./config.json")
+	data, err := ioutil.ReadFile("./config.yaml")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	json.Unmarshal(data, &cfg)
+	yaml.Unmarshal(data, &cfg)
 
 	go healthCheck()
 
