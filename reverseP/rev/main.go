@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"sync"
 
 	"github.com/bmf-san/godon"
 )
@@ -19,23 +18,5 @@ func serveBackend(name string, port string) {
 }
 
 func main() {
-	wg := new(sync.WaitGroup)
-	wg.Add(5)
-
-	go func() {
-		godon.Serve()
-		wg.Done()
-	}()
-
-	go func() {
-		serveBackend("web1", ":8081")
-		wg.Done()
-	}()
-
-	go func() {
-		serveBackend("web2", ":8082")
-		wg.Done()
-	}()
-
-	wg.Wait()
+	godon.Serve()
 }

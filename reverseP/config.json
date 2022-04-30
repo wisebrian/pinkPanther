@@ -4,10 +4,10 @@
 	},
 	"backends": [
 		{
-			"url": "http://172.16.238.10:8081/"
+			"url": "http://httpbin_1:80/"
 		},
 		{
-			"url": "http://172.16.238.12:8082/"
+			"url": "http://httpbin_2:80/"
 		}
 	]
 }

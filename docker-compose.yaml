@@ -4,29 +4,18 @@ services:
     build: ./reverseP
     ports: 
       - 8080:8080
-    networks:
-      revvv:
-        ipv4_address: 172.16.238.11
+    volumes: 
+      - "./config.json:/config.json"
         
-  origin:
-    build: ./origin
+  httpbin_1:
+    image: kennethreitz/httpbin
     ports: 
-      - 8081:8081
-    networks:
-      revvv:
-        ipv4_address: 172.16.238.10        
+      - 81:80    
 
-  web:
-    build: ./web
+  httpbin_2:
+    image: kennethreitz/httpbin
     ports: 
-      - 8082:8082
-    networks:
-      revvv:
-        ipv4_address: 172.16.238.12
+      - 82:80
         
 networks:
   revvv:
-    ipam:
-      driver: default
-      config:
-        - subnet: "172.16.238.0/24"
