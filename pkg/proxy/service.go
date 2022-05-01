@@ -1,6 +1,7 @@
 package proxy
 
 import (
+	"log"
 	"math/rand"
 	"net/http"
 	"strings"
@@ -40,6 +41,7 @@ func (s *Service) ReverseProxyHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("Proxying request to %s", currentHost.targetURL)
 	// Reverse proxy the request using the picked host.
 	currentHost.HandleRequest(w, r)
 }

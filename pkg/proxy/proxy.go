@@ -1,10 +1,12 @@
 package proxy
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	"gopkg.in/yaml.v2"
@@ -24,17 +26,32 @@ type Listener struct {
 type Proxy struct {
 	Listener Listener  `yaml:"listen"`
 	Services []Service `yaml:"services"`
+	*http.Server
 }
 
 // To be served in a goroutine
 func (p *Proxy) Serve() {
-	s := http.Server{
+	p.Server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", p.Listener.Address, p.Listener.Port),
 		Handler: http.HandlerFunc(p.ServiceHandler),
 	}
-	log.Printf("Started listening on %v", s.Addr)
-	if err := s.ListenAndServe(); err != nil {
-		log.Fatal(err.Error())
+
+	go func() {
+		log.Printf("Started listening on %v", p.Addr)
+		if err := p.ListenAndServe(); err != http.ErrServerClosed {
+			log.Fatal(err.Error())
+		}
+	}()
+}
+
+// https://rafallorenz.com/go/handle-signals-to-graceful-shutdown-http-server/
+func (p *Proxy) Shutdown(ctx context.Context) {
+	if err := p.Server.Shutdown(ctx); err != nil {
+		log.Printf("Shutdown error: %v\n", err)
+		defer os.Exit(1)
+		return
+	} else {
+		log.Printf("Gracefully stopped !\n")
 	}
 }
 
@@ -55,25 +72,27 @@ func (p *Proxy) ServiceHandler(w http.ResponseWriter, r *http.Request) {
 			if service.Retries > 0 {
 				retryCount := 0
 				// Retry if upstream errors. If it failed, retry n-1 times !
-				for retryCount < service.Retries && hasResponse == false {
+				for retryCount < service.Retries && !hasResponse {
 					log.Printf("[%d] Retrying request to %s..", retryCount+1, host)
 					p.Services[i].ReverseProxyHandler(w, r)
 					hasResponse = len(w.Header()) > 0
 					retryCount++
 				}
-
-				log.Printf("Failed reaching upstream after %d retries", service.Retries)
+				if !hasResponse {
+					log.Printf("Failed reaching upstream after %d retries", service.Retries)
+				}
 			} else {
 				w.WriteHeader(http.StatusBadGateway)
 				fmt.Fprintf(w, "Could not reach %s", host)
+				return
 			}
 
 			// If we still don't have a response, all hosts are down.
-			if hasResponse == false {
+			if !hasResponse {
 				w.WriteHeader(http.StatusServiceUnavailable)
 				fmt.Fprintf(w, "No healthy upstreams for %s", host)
-				return
 			}
+			return
 		}
 	}
 

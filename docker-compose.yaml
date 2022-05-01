@@ -16,6 +16,3 @@ services:
     image: kennethreitz/httpbin
     ports: 
       - 82:80
-        
-networks:
-  revvv:
