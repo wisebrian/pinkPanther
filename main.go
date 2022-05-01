@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io/ioutil"
 	"log"
 
@@ -8,7 +9,9 @@ import (
 )
 
 func main() {
-	config, err := ioutil.ReadFile("./config.yaml")
+
+	configPath := flag.String("config", "./config.yaml", "Path to proxy config file.")
+	config, err := ioutil.ReadFile(*configPath)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

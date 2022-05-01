@@ -10,3 +10,10 @@ proxy:
           port: 80
         - address: "httpbin_2"
           port: 80
+    - name: echo-service
+      domain: httpbin.org
+      hosts:
+        - address: "httpbin.org"
+          port: 80
+        - address: "httpbin_2"
+          port: 80

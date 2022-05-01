@@ -3,8 +3,9 @@ package proxy
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
-	"sync"
+	"time"
 
 	"gopkg.in/yaml.v2"
 )
@@ -44,10 +45,35 @@ func (p *Proxy) ServiceHandler(w http.ResponseWriter, r *http.Request) {
 		if service.Domain == host {
 			// Found a match !
 			log.Printf("Request matched hosts %s", host)
-			// retryCount := 0
-			// for retryCount < service.Retries {
+
+			// Reverse proxy the request
 			p.Services[i].ReverseProxyHandler(w, r)
-			// }
+
+			// The Error Handler is modified to mark the upstream address as dead , and not write anything.
+			hasResponse := len(w.Header()) > 0
+
+			if service.Retries > 0 {
+				retryCount := 0
+				// Retry if upstream errors. If it failed, retry n-1 times !
+				for retryCount < service.Retries && hasResponse == false {
+					log.Printf("[%d] Retrying request to %s..", retryCount+1, host)
+					p.Services[i].ReverseProxyHandler(w, r)
+					hasResponse = len(w.Header()) > 0
+					retryCount++
+				}
+
+				log.Printf("Failed reaching upstream after %d retries", service.Retries)
+			} else {
+				w.WriteHeader(http.StatusBadGateway)
+				fmt.Fprintf(w, "Could not reach %s", host)
+			}
+
+			// If we still don't have a response, all hosts are down.
+			if hasResponse == false {
+				w.WriteHeader(http.StatusServiceUnavailable)
+				fmt.Fprintf(w, "No healthy upstreams for %s", host)
+				return
+			}
 		}
 	}
 
@@ -55,30 +81,23 @@ func (p *Proxy) ServiceHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "No server found for given host %s", host)
 }
 
-// func serveBackend(name string, port string) {
-// 	mux := http.NewServeMux()
-// 	mux.Handle("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		w.WriteHeader(http.StatusOK)
-// 		fmt.Fprintf(w, "Backend server name:%v\n", name)
-// 		fmt.Fprintf(w, "Response header:%v\n", r.Header)
-// 	}))
-// 	http.ListenAndServe(port, mux)
-// }
-
-func NewProxy(yamlConfig []byte) Proxy {
+func NewProxy(yamlConfig []byte) *Proxy {
 	proxyConfig := &Config{}
 	if err := yaml.Unmarshal(yamlConfig, &proxyConfig); err != nil {
 		log.Fatalf("Could not load config ! %v", err)
 	}
-	proxy := proxyConfig.Proxy
-	// Init hosts
-	for _, service := range proxy.Services {
+	proxy := &proxyConfig.Proxy
+
+	// Needed at init time for the random lb.
+	rand.Seed(time.Now().UnixNano())
+
+	// Init services
+	for i := range proxy.Services {
+		service := &proxy.Services[i]
+		service.Init()
+		// Init hosts
 		for i := range service.Hosts {
-			service.Hosts[i].state = &HostState{
-				IsDead:  false,
-				RWMutex: sync.RWMutex{},
-			}
-			go service.Hosts[i].HealthCheck()
+			service.Hosts[i].Init()
 		}
 	}
 	return proxy
