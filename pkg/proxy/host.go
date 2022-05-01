@@ -17,6 +17,7 @@ type HostState struct {
 }
 
 type Host struct {
+	Scheme    string `yaml:"scheme"`
 	Address   string `yaml:"address"`
 	Port      int    `yaml:"port"`
 	targetURL *url.URL
@@ -44,8 +45,12 @@ func (h *Host) Init() {
 		IsDead:  false,
 		RWMutex: sync.RWMutex{},
 	}
+	if h.Scheme == "" {
+		h.Scheme = "http"
+	}
 	h.targetURL = &url.URL{
-		Host: fmt.Sprintf("%s:%d", h.Address, h.Port),
+		Scheme: h.Scheme,
+		Host:   fmt.Sprintf("%s:%d", h.Address, h.Port),
 	}
 	h.proxy = httputil.NewSingleHostReverseProxy(h.targetURL)
 	h.proxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, e error) {
