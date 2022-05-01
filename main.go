@@ -16,6 +16,7 @@ import (
 func main() {
 
 	configPath := flag.String("config", "./config.yaml", "Path to proxy config file.")
+	flag.Parse()
 	config, err := ioutil.ReadFile(*configPath)
 	if err != nil {
 		log.Fatal(err.Error())

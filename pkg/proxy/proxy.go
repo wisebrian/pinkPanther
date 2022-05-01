@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/lox/httpcache"
 	"gopkg.in/yaml.v2"
 )
 
@@ -31,9 +32,16 @@ type Proxy struct {
 
 // To be served in a goroutine
 func (p *Proxy) Serve() {
+
+	serviceHandler := http.HandlerFunc(p.ServiceHandler)
+
+	// In memory cache setup using github.com/lox/httpcache
+	cachedServiceHandler := httpcache.NewHandler(httpcache.NewMemoryCache(), serviceHandler)
+	cachedServiceHandler.Shared = true
+
 	p.Server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", p.Listener.Address, p.Listener.Port),
-		Handler: http.HandlerFunc(p.ServiceHandler),
+		Handler: cachedServiceHandler,
 	}
 
 	go func() {
