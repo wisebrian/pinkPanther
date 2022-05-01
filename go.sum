@@ -1,0 +1,12 @@
+github.com/ascarter/requestid v0.0.0-20170313220838-5b76ab3d4aee h1:3T/l+vMotQ7cDSLWNAn2Vg1SAQ3mdyLgBWWBitSS3uU=
+github.com/ascarter/requestid v0.0.0-20170313220838-5b76ab3d4aee/go.mod h1:u7Wtt4WATGGgae9mURNGQQqxAudPKrxfsbSDSGOso+g=
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/lox/httpcache v1.2.0 h1:PM7y5nWMxkTD0Tq3dNRKZosshtWeCZkDWgAYnyo4grk=
+github.com/lox/httpcache v1.2.0/go.mod h1:d/gfdtRb0sCxtH6y8N94BAjSOCBekdCnijLo/6V84Io=
+github.com/rainycape/vfs v0.0.0-20170722131704-164487ec47b4 h1:WHsWAhBinp4dsQx9mAYSpV6RTURwIfFMp/yvxUL/46c=
+github.com/rainycape/vfs v0.0.0-20170722131704-164487ec47b4/go.mod h1:ArOJDAI/9Dp6adwe3Fydx65JzxKEMaZXwMHebjLGxIM=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.4.0 h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=
+gopkg.in/yaml.v2 v2.4.0/go.mod h1:RDklbk79AGWmwhnvt/jBztapEOGDOx6ZbXqjP6csGnQ=

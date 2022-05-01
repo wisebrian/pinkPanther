@@ -1,11 +1,11 @@
 version: '3.9'
 services:
   revox:
-    build: ./reverseP
+    build: .
     ports: 
       - 8080:8080
     volumes: 
-      - "./config.json:/config.json"
+      - "./config.yaml:/config.yaml"
         
   httpbin_1:
     image: kennethreitz/httpbin
@@ -16,6 +16,3 @@ services:
     image: kennethreitz/httpbin
     ports: 
       - 82:80
-        
-networks:
-  revvv:

@@ -1,0 +1,22 @@
+proxy:
+  listen:
+    address: "0.0.0.0"
+    port: 8080
+  services:
+    - name: my-service
+      domain: my-service.my-company.com
+      hosts:
+        - address: "httpbin_1"
+          port: 80
+        - address: "httpbin_2"
+          port: 80
+    - name: echo-service
+      domain: httpbin.org
+      hosts:
+        - address: "httpbin.org"
+          scheme: "https"
+          port: 443
+        - address: "httpbin_1"
+          port: 80
+        - address: "httpbin_2"
+          port: 80
