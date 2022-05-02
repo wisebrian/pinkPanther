@@ -30,8 +30,11 @@ logs:
 
 # Helm stuff
 
-install:
-	helm upgrade -i revox ./helm
+install-demo:
+	helm upgrade -i revox ./helm --values ./helm/values-demo.yaml
 
 template:
-	helm template revox ./helm --values ./helm/values-demo.yaml
+	helm template revox ./helm --debug --values ./helm/values-demo.yaml
+	
+uninstall:
+	helm uninstall revox

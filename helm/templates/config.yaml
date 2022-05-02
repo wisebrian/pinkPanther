@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: revox-config
 data:
-  conf.json: |
-  {{- .Values.config | toYaml | nindent 2 -}}
+  config.yaml: |
+    {{- .Values.config | toYaml | nindent 4 -}}
