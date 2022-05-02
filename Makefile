@@ -27,3 +27,14 @@ state:
 
 logs:
 	docker-compose logs
+
+# Helm stuff
+
+install-demo:
+	helm upgrade -i revox ./helm --values ./helm/values-demo.yaml
+
+template:
+	helm template revox ./helm --debug --values ./helm/values-demo.yaml
+	
+uninstall:
+	helm uninstall revox
