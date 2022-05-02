@@ -1,0 +1,28 @@
+# Demo values. Deploys 2 httpbin deployments/services
+demo:
+  enabled: true
+  instances: 2
+  resources:
+    limits:
+      cpu: 300m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+config:
+  proxy:
+    listen:
+      address: "0.0.0.0"
+      port: 8080
+    services:
+      - name: echo-service
+        domain: httpbin.org
+        hosts:
+          - address: "httpbin.org"
+            scheme: "https"
+            port: 443
+          - address: "httpbin-1"
+            port: 80
+          - address: "httpbin-2"
+            port: 80
