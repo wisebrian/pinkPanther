@@ -1,13 +1,20 @@
-# Revox - a reverse proxy
+# Revox
+
+Revox is a project which aims to implement a reverse proxy. Written in Go.
+The package contains the proxy server, services and minimal unit tests.
+
+The solution can be deployed using either docker-compose or helm.
+
 
 ## Features
 - Load Balancing via two methods:
-  - Random Load Balancing
-  - Round Robin Load Balancing
+  - Random 
+  - Round Robin
 - Multiple upstream services
 - Healthchecks
 - Retries
 - HTTP Cache
+- YAML configuration
 
 ## Build
 
