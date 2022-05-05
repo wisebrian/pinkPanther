@@ -26,11 +26,29 @@ The proxy server listens for HTTP requests and forwards them to downstream servi
 
 ## Getting Started
 
+First clone the repository on your machine.
+
+```
+git clone https://github.com/wisebrian/revox.git`
+```
+
+CD into revox and run `make go-install` and `make go-build`.
+
 ### Build
 
 To build the docker image, `make build`.
 
+Start revox by executing `make start`. Please check if the three containers are up and running
+1 proxy & 2 services.
 
+Other useful commands would be:
+```
+make restart                              ///      rebuild and recreate the containers
+make stop                                 ///      stop the containers
+make remove                               ///      remove containers, networks, etc.
+make state                                ///      lists and displays containers state
+make logs                                 ///      prints log stream
+```
 
 
 ## Docker-compose
@@ -47,7 +65,7 @@ curl http://localhost:8080/cache/5 -H "Host: my-service.my-company.com"       //
 
 
 
-## Helm installation.
+## Helm installation
 
 `kubectl create ns demo-revox`
 
@@ -74,8 +92,15 @@ Handling connection for 8080
   "url": "https://httpbin.org/get"
 }
 ```
+## Limitations
 
+- Timeouts per host not implemented yet
+- O(n) time complexity
 
-## TODO:
+## Improvements / TODOs :
 
-Improve unit testing
+- Improve unit testing
+- Support for rate limiting
+- Implement timeouts per host
+- Healthchecks
+- O(1) time complexity
