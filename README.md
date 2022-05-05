@@ -1,8 +1,9 @@
 # Revox - a reverse proxy
 
 ## Features
-- Random Load Balancing
-- Round Robin Load Balancing
+- Load Balancing via two methods:
+  *-* Random Load Balancing
+  *-* Round Robin Load Balancing
 - Multiple upstream services
 - Healthchecks
 - Retries
