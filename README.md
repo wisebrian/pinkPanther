@@ -4,7 +4,9 @@ Revox is a project which aims to implement a reverse proxy. Written in Go.
 The package contains the proxy server, services and minimal unit tests.
 
 The solution can be deployed using either docker-compose or helm.
+It supports HTTP/1.1 and messages encoded in JSON.
 
+The proxy server listens for HTTP requests and forwards them to downstream services if the host header matches. In the eventuality of a match, the proxy server will implement the load balancing strategy specified in the configuration file and if no explicit strategy is declared, it will default to round robin.
 
 ## Features
 - Load Balancing via two methods:
@@ -24,7 +26,10 @@ To build the docker image, `make build`.
 To run the docker-copose setup, `make start`.
 To test, 
 ```
+curl http://localhost:8080/get -H "Host: my-service.my-company.com"
 curl http://localhost:8080/get -H "Host: httpbin.org"
+curl http://localhost:8080/cache/5 -H "Host: my-service.my-company.com"
+
 ```
 
 ## Helm installation.

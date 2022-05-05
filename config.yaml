@@ -5,6 +5,7 @@ proxy:
   services:
     - name: my-service
       domain: my-service.my-company.com
+      lbPolicy: "ROUND_ROBIN"
       hosts:
         - address: "httpbin_1"
           port: 80
@@ -12,6 +13,7 @@ proxy:
           port: 80
     - name: echo-service
       domain: httpbin.org
+      lbPolicy: "ROUND_ROBIN"
       hosts:
         - address: "httpbin.org"
           scheme: "https"
