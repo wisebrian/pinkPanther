@@ -19,9 +19,9 @@ The proxy server listens for HTTP requests and forwards them to downstream servi
 - HTTP Cache
 - YAML configuration
 
-### Getting Started
+## Getting Started
 
-## Build
+### Build
 
 To build the docker image, `make build`.
 
