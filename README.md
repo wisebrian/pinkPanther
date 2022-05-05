@@ -9,6 +9,8 @@ The proxy server listens for HTTP requests and forwards them to downstream servi
 
 *Written in Go.*
 
+
+
 ## Features
 - Load Balancing via two methods:
   - Random 
@@ -19,21 +21,31 @@ The proxy server listens for HTTP requests and forwards them to downstream servi
 - HTTP Cache
 - YAML configuration
 
+
+
+
 ## Getting Started
 
 ### Build
 
 To build the docker image, `make build`.
 
+
+
+
 ## Docker-compose
 To run the docker-copose setup, `make start`.
-To test, 
+To test HTTP requests:
 ```
-curl http://localhost:8080/get -H "Host: my-service.my-company.com"
-curl http://localhost:8080/get -H "Host: httpbin.org"
-curl http://localhost:8080/cache/5 -H "Host: my-service.my-company.com"
+curl http://localhost:8080/get -H "Host: my-service.my-company.com"           /// If you want to test
+curl http://localhost:8080/get -H "Host: httpbin.org"                         /// different Host headers
+
+curl http://localhost:8080/cache/5 -H "Host: my-service.my-company.com"       /// If you want to test cache hits
 
 ```
+
+
+
 
 ## Helm installation.
 
