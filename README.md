@@ -7,11 +7,11 @@ It supports HTTP/1.1 and messages encoded in JSON.
 
 The proxy server listens for HTTP requests and forwards them to downstream services if the host header matches. In the eventuality of a match, the proxy server will implement the load balancing strategy specified in the configuration file and if no explicit strategy is declared, it will default to round robin.
 
-*Written in Go.*
+*Written in Go. Had [godon](https://github.com/bmf-san/godon) as a starting point.*
 
 ## Design decisions
 
-desiign decisions bagi si tu ca ai vrut sa fie modular, usor testabil, usor configurabil (fiecare structura cu functionaliatea ei )
+I tried to make the project as modular as possible in order to facilitate testing and configuration.
 
 ## Features
 - Load Balancing via two methods:
