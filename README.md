@@ -7,11 +7,17 @@ It supports HTTP/1.1 and messages encoded in JSON.
 
 The proxy server listens for HTTP requests and forwards them to downstream services if the host header matches. In the eventuality of a match, the proxy server will implement the load balancing strategy specified in the configuration file and if no explicit strategy is declared, it will default to round robin.
 
+
 *Written in Go. Had [godon](https://github.com/bmf-san/godon) as a starting point.*
+
+
+
 
 ## Design decisions
 
-I tried to make the project as modular as possible in order to facilitate testing and configuration.
+I tried to make the project as modular as possible in order to facilitate readability, testing and configuration.
+
+
 
 ## Features
 - Load Balancing via two methods:
@@ -31,7 +37,7 @@ I tried to make the project as modular as possible in order to facilitate testin
 First clone the repository on your machine.
 
 ```
-git clone https://github.com/wisebrian/revox.git`
+git clone https://github.com/wisebrian/revox.git
 ```
 
 CD into revox and run `make go-install` and `make go-build`.
@@ -61,15 +67,19 @@ make logs                                 ///      prints log stream
 
 To test HTTP requests:
 ```
-curl http://localhost:8080/get -H "Host: my-service.my-company.com"           /// If you want to test
-curl http://localhost:8080/get -H "Host: httpbin.org"                         /// different Host headers
+curl http://localhost:8080/get -H "Host: httpbin.org"                         /// If you want to test
+curl http://localhost:8080/get -H "Host: my-service.my-company.com"           /// different Host headers
 
-curl http://localhost:8080/cache/5 -H "Host: my-service.my-company.com"       /// If you want to test cache hits
+
+curl http://localhost:8080/cache/5 -H "Host: httpbin.org"       /// If you want to test cache hits
 
 ```
-to simulate an upstream which exposes Cache-Control response headers, we can call the /cache/ttl endpoint of httpbin. Revox will try to cache the HTTP response based on RFC 7234, using `github.com/lox/httpcache`.
+To simulate an upstream which exposes Cache-Control response headers, we can call the `/cache/ttl` endpoint of `httpbin`. Revox will try to cache the HTTP response based on RFC 7234, using `github.com/lox/httpcache`.
+
 To make sure it is working you can open up a different terminal window and
-watch the logs by using the command listed earlier in the section and adding -i (include HTTP response headers) to the curl command. This will print out if the request was a cache hit or miss which can also be verified in the logs because no requests will be forwarded by the proxy.
+watch the logs by using the command listed earlier in the section and adding `-i` (include HTTP response headers) to the `curl` command. 
+
+This will print out if the request was a cache hit or miss which can also be verified in the logs because no requests will be forwarded by the proxy.
 
 
 
